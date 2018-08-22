@@ -7,6 +7,7 @@
 //
 
 #import "MapScreenSaverView.h"
+#import <MapKit/MapKit.h>
 
 @implementation MapScreenSaverView
 
@@ -22,6 +23,8 @@
 - (void)startAnimation
 {
     [super startAnimation];
+    MKMapView *mapView = [[MKMapView alloc] initWithFrame:self.frame];
+    [self addSubview:mapView];
 }
 
 - (void)stopAnimation
