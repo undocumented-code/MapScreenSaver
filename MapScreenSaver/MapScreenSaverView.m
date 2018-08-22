@@ -11,20 +11,23 @@
 
 @implementation MapScreenSaverView
 
+MKMapView *mapView;
+
 - (instancetype)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview
 {
     self = [super initWithFrame:frame isPreview:isPreview];
     if (self) {
         [self setAnimationTimeInterval:1/30.0];
     }
+    mapView = [[MKMapView alloc] initWithFrame:self.frame];
+    [mapView setMapType:MKMapTypeSatelliteFlyover];
+    [self addSubview:mapView];
     return self;
 }
 
 - (void)startAnimation
 {
     [super startAnimation];
-    MKMapView *mapView = [[MKMapView alloc] initWithFrame:self.frame];
-    [self addSubview:mapView];
 }
 
 - (void)stopAnimation
