@@ -6,8 +6,9 @@
 //  Copyright © 2018 Tucker Osman. All rights reserved.
 //
 
+#import <MapKit/MapKit.h>
 #import <ScreenSaver/ScreenSaver.h>
 
-@interface MapScreenSaverView : ScreenSaverView
+@interface MapScreenSaverView : ScreenSaverView<MKMapViewDelegate>
 
 @end

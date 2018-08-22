@@ -11,7 +11,11 @@
 
 @implementation MapScreenSaverView
 
-MKMapView *mapView;
+MKMapView* mapView;
+MKMapCamera* mapCamera;
+CLLocationCoordinate2D currentCenter;
+bool animating = false; //animation mutex
+double x = 0;
 
 - (instancetype)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview
 {
@@ -21,6 +25,7 @@ MKMapView *mapView;
     }
     mapView = [[MKMapView alloc] initWithFrame:self.frame];
     [mapView setMapType:MKMapTypeSatelliteFlyover];
+    mapView.delegate = self;
     [self addSubview:mapView];
     return self;
 }
@@ -28,6 +33,18 @@ MKMapView *mapView;
 - (void)startAnimation
 {
     [super startAnimation];
+    NSString *location = @"Eiffel Tower, France";
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder geocodeAddressString:location
+                 completionHandler:^(NSArray* placemarks, NSError* error){
+                     animating = true;
+                     if (placemarks && placemarks.count > 0) {
+                         CLPlacemark *topResult = [placemarks objectAtIndex:0];
+                         MKPlacemark *placemark = [[MKPlacemark alloc] initWithPlacemark:topResult];
+                         currentCenter = placemark.region.center;
+                     }
+                 }
+     ];
 }
 
 - (void)stopAnimation
@@ -42,6 +59,15 @@ MKMapView *mapView;
 
 - (void)animateOneFrame
 {
+    x+=0.02;
+    mapCamera = nil;
+    mapCamera = [[MKMapCamera alloc] init];
+    [mapCamera setPitch:75];
+    [mapCamera setCenterCoordinate:currentCenter];
+    [mapCamera setAltitude: 400];
+    [mapCamera setHeading:x];
+    
+    [mapView setCamera:mapCamera animated:NO];
     return;
 }
 
@@ -53,6 +79,11 @@ MKMapView *mapView;
 - (NSWindow*)configureSheet
 {
     return nil;
+}
+
+- (void)mapView:(MKMapView *)mapView
+regionDidChangeAnimated:(BOOL)animated {
+    if(animated) animating = false;
 }
 
 @end
