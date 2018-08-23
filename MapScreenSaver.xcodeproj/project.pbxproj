@@ -8,15 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		239D6EDA212CF67F0082692B /* ScreenSaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239D6ED9212CF67F0082692B /* ScreenSaver.framework */; };
+		239D6EE1212E60D70082692B /* BlackView.h in Headers */ = {isa = PBXBuildFile; fileRef = 239D6EDF212E60D70082692B /* BlackView.h */; };
+		239D6EE2212E60D70082692B /* BlackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 239D6EE0212E60D70082692B /* BlackView.m */; };
 		23D1BC70212CC84C001485F3 /* MapScreenSaverView.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D1BC6F212CC84C001485F3 /* MapScreenSaverView.h */; };
 		23D1BC72212CC84C001485F3 /* MapScreenSaverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D1BC71212CC84C001485F3 /* MapScreenSaverView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		239D6ED9212CF67F0082692B /* ScreenSaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenSaver.framework; path = System/Library/Frameworks/ScreenSaver.framework; sourceTree = SDKROOT; };
+		239D6EDF212E60D70082692B /* BlackView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlackView.h; sourceTree = "<group>"; };
+		239D6EE0212E60D70082692B /* BlackView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlackView.m; sourceTree = "<group>"; };
 		23D1BC6C212CC84C001485F3 /* MapScreenSaver.saver */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapScreenSaver.saver; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D1BC6F212CC84C001485F3 /* MapScreenSaverView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapScreenSaverView.h; sourceTree = "<group>"; };
-		23D1BC71212CC84C001485F3 /* MapScreenSaverView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapScreenSaverView.m; sourceTree = "<group>"; };
+		23D1BC71212CC84C001485F3 /* MapScreenSaverView.m */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = MapScreenSaverView.m; sourceTree = "<group>"; tabWidth = 4; };
 		23D1BC73212CC84C001485F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,6 +67,8 @@
 				23D1BC6F212CC84C001485F3 /* MapScreenSaverView.h */,
 				23D1BC71212CC84C001485F3 /* MapScreenSaverView.m */,
 				23D1BC73212CC84C001485F3 /* Info.plist */,
+				239D6EDF212E60D70082692B /* BlackView.h */,
+				239D6EE0212E60D70082692B /* BlackView.m */,
 			);
 			path = MapScreenSaver;
 			sourceTree = "<group>";
@@ -75,6 +81,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23D1BC70212CC84C001485F3 /* MapScreenSaverView.h in Headers */,
+				239D6EE1212E60D70082692B /* BlackView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +152,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				239D6EE2212E60D70082692B /* BlackView.m in Sources */,
 				23D1BC72212CC84C001485F3 /* MapScreenSaverView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

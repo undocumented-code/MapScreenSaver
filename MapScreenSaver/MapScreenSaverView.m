@@ -7,15 +7,17 @@
 //
 
 #import "MapScreenSaverView.h"
+#import "BlackView.h"
 #import <MapKit/MapKit.h>
 
 @implementation MapScreenSaverView
 
-MKMapView* mapView;
-MKMapCamera* mapCamera;
-CLLocationCoordinate2D currentCenter;
-bool animating = false; //animation mutex
-double x = 0;
+MKMapView* mapView; //the map
+MKMapCamera* mapCamera; //how we look at it
+CLLocationCoordinate2D currentCenter; //center of map
+FadeState fadeState = noFade; //fade animator state
+double heading = 0; //direction of camera
+BlackView * blackView;
 
 - (instancetype)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview
 {
@@ -23,10 +25,15 @@ double x = 0;
     if (self) {
         [self setAnimationTimeInterval:1/30.0];
     }
-    mapView = [[MKMapView alloc] initWithFrame:self.frame];
+    
+    mapView = [[MKMapView alloc] initWithFrame:frame];
     [mapView setMapType:MKMapTypeSatelliteFlyover];
-    mapView.delegate = self;
+    
+    blackView = [[BlackView alloc] initWithFrame:self.frame];
+    blackView.alphaValue = 1;
+    
     [self addSubview:mapView];
+    [mapView addSubview:blackView];
     return self;
 }
 
@@ -34,17 +41,12 @@ double x = 0;
 {
     [super startAnimation];
     NSString *location = @"Eiffel Tower, France";
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    [geocoder geocodeAddressString:location
-                 completionHandler:^(NSArray* placemarks, NSError* error){
-                     animating = true;
-                     if (placemarks && placemarks.count > 0) {
-                         CLPlacemark *topResult = [placemarks objectAtIndex:0];
-                         MKPlacemark *placemark = [[MKPlacemark alloc] initWithPlacemark:topResult];
-                         currentCenter = placemark.region.center;
-                     }
-                 }
-     ];
+    [self setCenterTo:location];
+    [NSTimer  scheduledTimerWithTimeInterval:15.0
+              repeats:YES
+              block:^(NSTimer* timer){
+                  fadeState = fadeOut;
+              }];
 }
 
 - (void)stopAnimation
@@ -59,13 +61,33 @@ double x = 0;
 
 - (void)animateOneFrame
 {
-    x+=0.02;
+    switch (fadeState) {
+        case fadeOut:
+            if (blackView.alphaValue >= 1) {
+                fadeState = noFade;
+                [self nextLandmark];
+            } else {
+                blackView.alphaValue += 0.05;
+            }
+            break;
+        case fadeIn:
+            if (blackView.alphaValue <= 0) {
+                fadeState = noFade;
+            }
+            else{
+                blackView.alphaValue -= 0.05;
+            }
+            break;
+        case noFade:
+            break;
+    }
+    heading += 0.02;
     mapCamera = nil;
     mapCamera = [[MKMapCamera alloc] init];
     [mapCamera setPitch:75];
     [mapCamera setCenterCoordinate:currentCenter];
-    [mapCamera setAltitude: 400];
-    [mapCamera setHeading:x];
+    [mapCamera setAltitude:400];
+    [mapCamera setHeading:heading];
     
     [mapView setCamera:mapCamera animated:NO];
     return;
@@ -81,9 +103,22 @@ double x = 0;
     return nil;
 }
 
-- (void)mapView:(MKMapView *)mapView
-regionDidChangeAnimated:(BOOL)animated {
-    if(animated) animating = false;
+- (void) nextLandmark
+{
+    [self setCenterTo:@"350 5th Ave, New York, NY 10118"];
+}
+
+- (void)setCenterTo:(NSString*)location
+{
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder geocodeAddressString:location completionHandler:^(NSArray* placemarks, NSError* error){
+        if (placemarks && placemarks.count > 0) {
+            CLPlacemark *topResult = [placemarks objectAtIndex:0];
+            MKPlacemark *placemark = [[MKPlacemark alloc] initWithPlacemark:topResult];
+            currentCenter = placemark.region.center;
+        }
+        fadeState = fadeIn;
+    }];
 }
 
 @end

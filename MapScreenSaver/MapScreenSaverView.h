@@ -9,6 +9,12 @@
 #import <MapKit/MapKit.h>
 #import <ScreenSaver/ScreenSaver.h>
 
-@interface MapScreenSaverView : ScreenSaverView<MKMapViewDelegate>
+typedef enum {
+    fadeIn,
+    fadeOut,
+    noFade
+} FadeState;
+
+@interface MapScreenSaverView : ScreenSaverView
 
 @end
