@@ -18,6 +18,7 @@ CLLocationCoordinate2D currentCenter; //center of map
 FadeState fadeState = noFade; //fade animator state
 double heading = 0; //direction of camera
 BlackView * blackView;
+uint32_t lastLandmark = -1;
 
 - (instancetype)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview
 {
@@ -40,8 +41,7 @@ BlackView * blackView;
 - (void)startAnimation
 {
     [super startAnimation];
-    NSString *location = @"Eiffel Tower, France";
-    [self setCenterTo:location];
+    [self nextLandmark];
     [NSTimer  scheduledTimerWithTimeInterval:15.0
               repeats:YES
               block:^(NSTimer* timer){
@@ -105,7 +105,22 @@ BlackView * blackView;
 
 - (void) nextLandmark
 {
-    [self setCenterTo:@"350 5th Ave, New York, NY 10118"];
+    NSArray *pointsOfInterest;
+    pointsOfInterest = [NSArray arrayWithObjects:
+            @"Eiffel Tower, France",
+            @"350 5th Ave, New York, NY 10118",
+            @"Sydney Opera House Bennelong Point Sydney NSW 2000 Australia",
+            @"London Eye Westminster Bridge Road London SE1 England",
+            @"The Colosseum, Rome, Italy",
+            @"34.134061,-118.321592", //The Hollywood Sign
+            @"Sagrada Familia, Barcelona, Spain",
+            @"11 N 4th St Saint Louis, MO  63102 United States",
+            nil];
+    
+    uint32_t rnd;
+    while ((rnd = arc4random_uniform([pointsOfInterest count])) == lastLandmark);
+    
+    [self setCenterTo: [pointsOfInterest objectAtIndex:rnd]];
 }
 
 - (void)setCenterTo:(NSString*)location
